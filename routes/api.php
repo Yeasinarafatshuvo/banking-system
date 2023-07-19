@@ -17,5 +17,7 @@ Route::post('/login', [UserController::class, 'login']);
 // Protected routes
 Route::middleware('auth:api')->group(function () {
     Route::get('/', [TransactionController::class, 'index']);
+    Route::get('/deposit', [TransactionController::class, 'showDeposits']);
+    Route::post('/deposit', [TransactionController::class, 'deposit']);
    
 });

@@ -22,4 +22,44 @@ class TransactionController extends Controller
             'balance' => $balance,
         ]);
     }
+
+    public function showDeposits()
+    {
+        $user = Auth::user();
+
+        $deposits = Transaction::where('user_id', $user->id)
+            ->where('transaction_type', 'deposit')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json(['deposits' => $deposits]);
+    }
+
+    public function deposit(Request $request)
+    {
+        $this->validate($request, [
+            'user_id' => 'required|integer',
+            'amount' => 'required|numeric|min:0',
+        ]);
+        
+        $user = User::find($request->user_id);
+        
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $user->balance += $request->amount;
+        $user->save();
+
+        $transaction = new Transaction([
+            'user_id' => $user->id,
+            'transaction_type' => 'deposit',
+            'amount' => $request->amount,
+            'fee' => 0,
+        ]);
+
+        $transaction->save();
+
+        return response()->json(['message' => 'Deposit successful'], 201);
+    }
 }
