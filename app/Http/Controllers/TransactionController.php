@@ -30,10 +30,10 @@ class TransactionController extends Controller
         $user = Auth::user();
         
         $deposits = Transaction::where('user_id', $user->id)
-                                ->where('transaction_type', 'deiposit')
+                                ->where('transaction_type', 'deposit')
                                 ->orderBy('created_at', 'desc')
                                 ->get();
-        return $deposits;
+        
         return response()->json(['deposits' => $deposits]);
     }
 
@@ -53,7 +53,7 @@ class TransactionController extends Controller
 
         $user->balance += $request->amount;
         $user->save();
-
+        
         $transaction = new Transaction([
             'user_id' => $user->id,
             'transaction_type' => 'deposit',
@@ -76,7 +76,7 @@ class TransactionController extends Controller
                                     ->where('transaction_type', 'withdraw')
                                     ->orderBy('created_at', 'desc')
                                     ->get();
-
+        return $user;
         return response()->json(['withdrawals' => $withdrawals]);
     }
 
@@ -84,6 +84,7 @@ class TransactionController extends Controller
     //method for withdraw user money from account 
     public function withdraw(Request $request)
     {
+       
         $this->validate($request, [
             'user_id' => 'required|integer',
             'amount' => 'required|numeric|min:0',
@@ -144,14 +145,14 @@ class TransactionController extends Controller
 
         $user->balance -= $totalAmount;
         $user->save();
-
+        
         $transaction = new Transaction([
             'user_id' => $user->id,
             'transaction_type' => 'withdraw',
             'amount' => $withdrawalAmount,
             'fee' => $withdrawalFee,
         ]);
-
+        
         $transaction->save();
 
         return response()->json(['message' => 'Withdrawal successful'], 200);
