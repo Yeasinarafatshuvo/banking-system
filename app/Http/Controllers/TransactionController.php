@@ -70,13 +70,14 @@ class TransactionController extends Controller
     //method for show all user withdrawal transaction
     public function showWithdrawals()
     {
+        
         $user = Auth::user();
 
         $withdrawals = Transaction::where('user_id', $user->id)
                                     ->where('transaction_type', 'withdraw')
                                     ->orderBy('created_at', 'desc')
                                     ->get();
-        return $user;
+        
         return response()->json(['withdrawals' => $withdrawals]);
     }
 
