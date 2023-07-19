@@ -11,6 +11,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
+    //register user account
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -29,9 +30,10 @@ class UserController extends Controller
 
         $user->save();
 
-        return response()->json(['message' => 'User created successfully'], 201);
+        return response()->json(['message' => 'User created successfully'], 200);
     }
 
+    //login user account
     public function login(Request $request)
     {
         $this->validate($request, [
@@ -48,5 +50,16 @@ class UserController extends Controller
         }
 
         return response()->json(['token' => $token]);
+    }
+
+    //logout user account
+    public function logout()
+    {
+        auth()->logout();
+        return response()->json([
+            'status' => 1,
+            'message' => 'user account Logged Out Successfully!',
+        ],200);
+
     }
 }

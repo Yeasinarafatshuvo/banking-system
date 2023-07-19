@@ -22,4 +22,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/withdrawal', [TransactionController::class, 'showWithdrawals']);
     Route::post('/withdrawal', [TransactionController::class, 'withdraw']);
 
+    Route::get('/logout', [UserController::class, 'logout']);
+
 });
