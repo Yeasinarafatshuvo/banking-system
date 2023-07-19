@@ -28,9 +28,9 @@ class TransactionController extends Controller
         $user = Auth::user();
 
         $deposits = Transaction::where('user_id', $user->id)
-            ->where('transaction_type', 'deposit')
-            ->orderBy('created_at', 'desc')
-            ->get();
+                                ->where('transaction_type', 'deposit')
+                                ->orderBy('created_at', 'desc')
+                                ->get();
 
         return response()->json(['deposits' => $deposits]);
     }
@@ -62,4 +62,19 @@ class TransactionController extends Controller
 
         return response()->json(['message' => 'Deposit successful'], 201);
     }
+
+
+    public function showWithdrawals()
+    {
+        $user = Auth::user();
+
+        $withdrawals = Transaction::where('user_id', $user->id)
+                                    ->where('transaction_type', 'withdraw')
+                                    ->orderBy('created_at', 'desc')
+                                    ->get();
+
+        return response()->json(['withdrawals' => $withdrawals]);
+    }
+
+
 }
