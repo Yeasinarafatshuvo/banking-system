@@ -28,12 +28,12 @@ class TransactionController extends Controller
     public function showDeposits()
     {
         $user = Auth::user();
-
+        
         $deposits = Transaction::where('user_id', $user->id)
-                                ->where('transaction_type', 'deposit')
+                                ->where('transaction_type', 'deiposit')
                                 ->orderBy('created_at', 'desc')
                                 ->get();
-
+        return $deposits;
         return response()->json(['deposits' => $deposits]);
     }
 
